@@ -54,7 +54,7 @@ function checkFunction(
     }
   } else if (
     node.type === "FunctionDeclaration" &&
-    currentNode.type === "Program"
+    ["Program", "ExportNamedDeclaration"].includes(currentNode.type)
   ) {
     if (node.id !== null && componentNameRegex.test(node.id.name)) {
       context.report({ node, messageId: "memo-required" });
