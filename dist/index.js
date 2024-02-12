@@ -2,48 +2,58 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-var componentNameRegex$1 = /^[A-Z]/;
-function isMemoCallExpression(node) {
-    if (node.type !== "CallExpression")
-        return false;
-    if (node.callee.type === "MemberExpression") {
-        var _a = node.callee, object = _a.object, property = _a.property;
-        if (object.type === "Identifier" &&
-            property.type === "Identifier" &&
-            object.name === "React" &&
-            property.name === "memo") {
-            return true;
-        }
-    }
-    else if (node.callee.type === "Identifier" && node.callee.name === "memo") {
-        return true;
-    }
-    return false;
-}
-function checkFunction(context, node) {
-    if (node.params.length === 0)
-        return;
-    var currentNode = node.parent;
-    while (currentNode.type === "CallExpression") {
-        if (isMemoCallExpression(currentNode)) {
-            return;
-        }
-        currentNode = currentNode.parent;
-    }
-    if (currentNode.type === "VariableDeclarator") {
-        var id = currentNode.id;
-        if (id.type === "Identifier") {
-            if (componentNameRegex$1.test(id.name)) {
-                context.report({ node: node, messageId: "memo-required" });
-            }
-        }
-    }
-    else if (node.type === "FunctionDeclaration" &&
-        ["Program", "ExportNamedDeclaration"].includes(currentNode.type)) {
-        if (node.id !== null && componentNameRegex$1.test(node.id.name)) {
-            context.report({ node: node, messageId: "memo-required" });
-        }
-    }
+var COMPONENT_NAME_REGEX = /^[A-Z]/;
+function checkFunction(context, node
+// &
+//   Rule.NodeParentExtension
+) {
+    // let currentNode = node.parent;
+    // while (currentNode.type === "CallExpression") {
+    //   if (isMemoCallExpression(currentNode)) {
+    //     return;
+    //   }
+    var _a, _b, _c, _d, _e, _f, _g;
+    //   currentNode = currentNode.parent;
+    // }
+    var fnName = 
+    // @ts-ignore
+    (_b = (_a = node.id) === null || _a === void 0 ? void 0 : _a.name) !== null && _b !== void 0 ? _b : 
+    // @ts-ignore
+    (_d = (_c = node.parent) === null || _c === void 0 ? void 0 : _c.id) === null || _d === void 0 ? void 0 : _d.name; // const fn はこっち
+    console.log([
+        node.type,
+        fnName,
+        // @ts-ignore
+        (_g = (_f = (_e = node.parent) === null || _e === void 0 ? void 0 : _e.parent) === null || _f === void 0 ? void 0 : _f.id) === null || _g === void 0 ? void 0 : _g.name,
+        node.returnType,
+    ]);
+    if (COMPONENT_NAME_REGEX.test(fnName) &&
+        !node.returnType)
+        context.report({ node: node, messageId: "memo-required" });
+    //if (currentNode.type === "VariableDeclarator") {
+    //  const { id } = currentNode;
+    // if (node.type === "VariableDeclarator") {
+    //   const { id } = node;
+    //   if (id.type === "Identifier") {
+    //     if (
+    //       componentNameRegex.test(id.name) &&
+    //       !(node as IFunctionDeclaration).returnType
+    //     ) {
+    //       context.report({ node, messageId: "memo-required" });
+    //     }
+    //   }
+    // } else if (
+    //   node.type === "FunctionDeclaration" &&
+    //   ["Program", "ExportNamedDeclaration"].includes(currentNode.type)
+    // ) {
+    //   if (
+    //     node.id !== null &&
+    //     componentNameRegex.test(node.id.name) &&
+    //     !(node as IFunctionDeclaration).returnType
+    //   ) {
+    //     context.report({ node, messageId: "memo-required" });
+    //   }
+    // }
 }
 var rule$2 = {
     meta: {
