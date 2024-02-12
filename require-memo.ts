@@ -1,6 +1,5 @@
 import { Rule } from "eslint";
 import * as ESTree from "estree";
-import * as path from "path";
 
 const componentNameRegex = /^[A-Z]/;
 
@@ -59,11 +58,13 @@ function checkFunction(
     if (node.id !== null && componentNameRegex.test(node.id.name)) {
       context.report({ node, messageId: "memo-required" });
     } else {
-      if (context.getFilename() === "<input>") return;
-      const filename = path.basename(context.getFilename());
-      if (componentNameRegex.test(filename)) {
-        context.report({ node, messageId: "memo-required" });
-      }
+      // 関数名が大文字始まりでない場合、ファイル名を見て判断する。
+      // なんじゃこりゃ… イラネ。。
+      // if (context.getFilename() === "<input>") return;
+      // const filename = path.basename(context.getFilename());
+      // if (componentNameRegex.test(filename)) {
+      //   context.report({ node, messageId: "memo-required" });
+      // }
     }
   }
 }
