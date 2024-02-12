@@ -23,9 +23,9 @@
     "typescript": "^4.2.3"
   },
   "scripts": {
-    "test": "jest",
-    "build": "npm run clean && rollup -c",
     "watch": "npm run clean && rollup -c -w",
+    "build": "npm run clean && rollup -c",
+    "test": "jest",
     "clean": "rm -rf dist",
     "prepublish:public": "npm run build && npm run bump-version",
     "publish:public": "npm publish --access public"

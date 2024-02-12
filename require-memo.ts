@@ -2,7 +2,7 @@ import { Rule } from "eslint";
 import * as ESTree from "estree";
 import * as path from "path";
 
-const componentNameRegex = /^[^a-z]/;
+const componentNameRegex = /^[A-Z]/;
 
 function isMemoCallExpression(node: Rule.Node) {
   if (node.type !== "CallExpression") return false;
